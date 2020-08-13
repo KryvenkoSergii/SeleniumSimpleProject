@@ -1,0 +1,1 @@
+package home.kryvenkosergii.SeleniumSimpleProject.ui.page;

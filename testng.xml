@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="SeleniumSimpleProject_TestSuite">
+
+	<!-- 3 ERROR 5 WARNING 7 INFO 9 TRACE -->
+	<test name="Search Random Word" verbose="2">
+		<classes>
+			<!-- Search one random word in google -->
+			<class name="home.kryvenkosergii.SeleniumSimpleProject.ui.test.SimpleTest">
+				<methods>
+					<include name="search" />
+				</methods>
+			</class>
+		</classes>
+	</test> <!-- Test -->
+
+</suite> <!-- Suite -->
