@@ -1,10 +1,15 @@
 package home.kryvenkosergii.SeleniumSimpleProject.ui.page;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +23,7 @@ public class MainGooglePage {
     //
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private WebDriver driver;
+    private WebDriverWait wait;
     //
     private WebElement searchField;
     private WebElement searchButton;
@@ -37,6 +43,7 @@ public class MainGooglePage {
      * Initialize web elements
      */
     private void initElements() {
+        wait = new WebDriverWait(driver, 1);
         searchField = driver.findElement(By.cssSelector(".a4bIc input[class='gLFyf gsfi']"));
         searchButton = driver.findElement(By.cssSelector(".gNO89b"));
     }
@@ -123,7 +130,25 @@ public class MainGooglePage {
 
     // searchResult
     private WebElement getSearchResult() {
-        searchResult = driver.findElement(By.cssSelector("#topstuff p[role='heading']"));
+        String noResultsCssSelector = "#topstuff p[role='heading']";
+        String existResultsIdSelector = "result-stats";
+        boolean result;
+        //
+        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        try {
+            result = wait.until(ExpectedConditions.presenceOfElementLocated(By.id(existResultsIdSelector))).isEnabled();
+        } catch (TimeoutException e) {
+            result = false;
+        }
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        //
+        if (result) {
+            searchResult = driver.findElement(By.id(existResultsIdSelector));
+        } else {
+            logger.info("any results not found");
+            searchResult = driver.findElement(By.cssSelector(noResultsCssSelector));
+        }
+        //
         return searchResult;
     }
 
